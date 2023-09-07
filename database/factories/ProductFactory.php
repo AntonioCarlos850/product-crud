@@ -16,8 +16,13 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+        $photo = explode('storage/', fake()->image(public_path('storage/products')))[1];
         return [
-            //
+            'price' => fake()->randomNumber(2),
+            'name' => fake()->domainName(),
+            'photo' => $photo,
+            'description' => fake()->text(500),
+            'brand' => fake()->userName()
         ];
     }
 }
