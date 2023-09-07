@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductCollection;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 
 class ProductController extends Controller
@@ -14,7 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::paginate();
+        return new ProductCollection(Product::paginate());
     }
 
     /**
@@ -28,7 +30,7 @@ class ProductController extends Controller
             $validated['photo'] = $request->file('photo')->store('products', 'public');
         }
 
-        return Product::create($validated);
+        return new ProductResource(Product::create($validated));
     }
 
     /**
@@ -37,7 +39,7 @@ class ProductController extends Controller
     public function show(int $product)
     {
         try {
-            return Product::findOrFail($product);
+            return new ProductResource(Product::findOrFail($product));
         } catch (\Throwable $th) {
             return response()->json(__('Product Not Found'), 404);
         }
