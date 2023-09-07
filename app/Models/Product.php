@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -20,10 +22,27 @@ class Product extends Model
         );
     }
 
-    protected function photo(): Attribute
+    protected function image(): Attribute
     {
         return Attribute::make(
-            get: fn (?string $value) => is_null($value) ? $value : asset('storage/' . $value),
+            get: fn () => is_null($this->photo) ? $this->photo : asset('storage/' . $this->photo),
         );
+    }
+
+    public function deletePhoto()
+    {
+        if ($this->getOriginal('photo')) {
+            Storage::disk('public')->delete($this->getOriginal('photo'));
+        }
+    }
+
+    public function verifyPhotoChange()
+    {
+        if (
+            $this->getOriginal('photo')
+            && $this->getOriginal('photo') != $this->photo
+        ) {
+            $this->deletePhoto();
+        }
     }
 }
