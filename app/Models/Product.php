@@ -19,4 +19,11 @@ class Product extends Model
             set: fn (float $value) => 100 * $value,
         );
     }
+
+    protected function photo(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => is_null($value) ? $value : asset('storage/' . $value),
+        );
+    }
 }
