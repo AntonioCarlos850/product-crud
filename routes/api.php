@@ -15,4 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('products', ProductController::class);
+Route::post('products/{product}', [ProductController::class, 'update'])->name('product.update');
+Route::apiResource('products', ProductController::class)->except('update');
