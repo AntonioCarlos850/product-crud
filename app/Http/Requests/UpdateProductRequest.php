@@ -7,14 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateProductRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
@@ -22,7 +14,11 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'price' => ['decimal:2', 'min:0', 'required'],
+            'name' => ['string', 'required'],
+            'description' => ['string', 'required'],
+            'brand' => ['string', 'required'],
+            'photo' => ['image', 'nullable'],
         ];
     }
 }
